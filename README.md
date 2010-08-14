@@ -7,8 +7,8 @@ Currently, this only works with a minimally modified patched version of Connect 
 ## Example
 I have re-implemented the example chat application from the Socket.IO-node github repo, using Connect and Socket.IO-connect. To run this example:
 
-  git clone http://github.com/bnoguchi/Socket.IO-connect --recursive
-  cd Socket.IO-connect/example
-  node server.js
+	git clone http://github.com/bnoguchi/Socket.IO-connect.git --recursive
+	cd Socket.IO-connect/example/
+	node server.js
 
 and then point your browser to http://127.0.0.1:8080.
