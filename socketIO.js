@@ -31,11 +31,12 @@ exports.socketIO = function (options, connectionCallback) {
 
   var listener;
   var handle = function (req, res, next) {
-    if (req.upgrade) {
+    if (req.upgrade) { // Assigned earlier on an upgrade event
       var head = next;
-      if (!listener.check(req, res, true, head)){
+      if (!listener.check(req, res, true, req.head)){
         socket.destroy();
       }
+      return;
     } else {
       if (listener.check(req, res)) {
         return;
@@ -48,9 +49,6 @@ exports.socketIO = function (options, connectionCallback) {
   handle.accessServer = function (server) {
     listener = this._socketIOListener = new Listener(server, options);
     listener.on("connection", connectionCallback);
-//    server.addListener("upgrade", function (req, socket, head) {
-//      server.handle(req, socket, head);
-//    });
   };
   return handle;
 };
@@ -82,20 +80,26 @@ var Listener = function (server, options) {
 
 	this.clients = this.clientsIndex = {};
 	
-	var listeners = this.server.listeners('request');
-	this.server.removeAllListeners('request');
-	
-	this.server.addListener('request', function(req, res){
-		if (self.check(req, res)) return;
-		for (var i = 0, len = listeners.length; i < len; i++){
-			listeners[i].call(this, req, res);
-		}
-	});
+//	var listeners = this.server.listeners('request');
+//	this.server.removeAllListeners('request');
+//	
+//	this.server.addListener('request', function(req, res){
+//		if (self.check(req, res)) return;
+//		for (var i = 0, len = listeners.length; i < len; i++){
+//			listeners[i].call(this, req, res);
+//		}
+//	});
 	
 	this.server.addListener('upgrade', function(req, socket, head){
-		if (!self.check(req, socket, true, head)){
-			socket.destroy();
-		}
+    // Remember certain state via the req(uest) object
+    req.upgrade = true;
+    req.head = head;
+
+    // Then pass it down the Connect layers via handle
+    this.handle(req, socket);
+//		if (!self.check(req, socket, true, head)){
+//			socket.destroy();
+//		}
 	});
 	
 	for (var i in transports){
@@ -118,6 +122,7 @@ Listener.prototype.broadcast = function(message, except){
 };
 
 Listener.prototype.check = function(req, res, httpUpgrade, head){
+  console.log("CHECK " + req.url);
 	var path = url.parse(req.url).pathname, parts, cn;
 	if (path && path.indexOf('/' + this.options.resource) === 0){	
 		parts = path.substr(1).split('/');
