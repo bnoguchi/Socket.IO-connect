@@ -122,7 +122,6 @@ Listener.prototype.broadcast = function(message, except){
 };
 
 Listener.prototype.check = function(req, res, httpUpgrade, head){
-  console.log("CHECK " + req.url);
 	var path = url.parse(req.url).pathname, parts, cn;
 	if (path && path.indexOf('/' + this.options.resource) === 0){	
 		parts = path.substr(1).split('/');
