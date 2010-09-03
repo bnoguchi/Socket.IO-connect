@@ -48,24 +48,29 @@ exports.socketIO = function (options, connectionCallback) {
   handle.accessServer = function (server) {
     listener = this._socketIOListener = new Listener(server, options);
     listener.on("connection", connectionCallback);
-    server.addListener("upgrade", function (req, socket, head) {
-      server.handle(req, socket, head);
-    });
+//    server.addListener("upgrade", function (req, socket, head) {
+//      server.handle(req, socket, head);
+//    });
   };
   return handle;
 };
 
 var Listener = function (server, options) {
-  process.EventEmitter.call(this);
-  var self = this;
-  this.server = server;
+	process.EventEmitter.call(this);
+	var self = this;
+	this.server = server;
 	this.options({
 		origins: '*:*',
 		resource: 'socket.io',
-		transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling'],
+		transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
 		transportOptions: {
 			'xhr-polling': {
-				timeout: null, // no heartbeats for polling
+				timeout: null, // no heartbeats
+				closeTimeout: 8000,
+				duration: 20000
+			},
+			'jsonp-polling': {
+				timeout: null, // no heartbeats
 				closeTimeout: 8000,
 				duration: 20000
 			}
@@ -74,8 +79,24 @@ var Listener = function (server, options) {
 			require('sys').log(message);
 		}
 	}, options);
-	this.clients = [];
-	this.clientsIndex = {};
+
+	this.clients = this.clientsIndex = {};
+	
+	var listeners = this.server.listeners('request');
+	this.server.removeAllListeners('request');
+	
+	this.server.addListener('request', function(req, res){
+		if (self.check(req, res)) return;
+		for (var i = 0, len = listeners.length; i < len; i++){
+			listeners[i].call(this, req, res);
+		}
+	});
+	
+	this.server.addListener('upgrade', function(req, socket, head){
+		if (!self.check(req, socket, true, head)){
+			socket.destroy();
+		}
+	});
 	
 	for (var i in transports){
 		if ('init' in transports[i]) transports[i].init(this);
@@ -88,9 +109,9 @@ sys.inherits(Listener, process.EventEmitter);
 for (var i in options) Listener.prototype[i] = options[i];
 
 Listener.prototype.broadcast = function(message, except){
-	for (var i = 0, l = this.clients.length; i < l; i++){
-		if (this.clients[i] && (!except || [].concat(except).indexOf(this.clients[i].sessionId) == -1)){
-			this.clients[i].send(message);
+	for (var i = 0, k = Object.keys(this.clients), l = k.length; i < l; i++){
+		if (this.clients[k[i]] && (!except || [].concat(except).indexOf(this.clients[k[i]].sessionId) == -1)){
+			this.clients[k[i]].send(message);
 		}
 	}
 	return this;
@@ -98,10 +119,11 @@ Listener.prototype.broadcast = function(message, except){
 
 Listener.prototype.check = function(req, res, httpUpgrade, head){
 	var path = url.parse(req.url).pathname, parts, cn;
-	if (path.indexOf('/' + this.options.resource) === 0){	
+	if (path && path.indexOf('/' + this.options.resource) === 0){	
 		parts = path.substr(1).split('/');
+		if (!(parts[1] in transports)) return false;
 		if (parts[2]){
-			cn = this._lookupClient(parts[2]);
+			cn = this.clients[parts[2]];
 			if (cn){
 				cn._onConnect(req, res);
 			} else {
@@ -116,17 +138,11 @@ Listener.prototype.check = function(req, res, httpUpgrade, head){
 	return false;
 };
 
-Listener.prototype._lookupClient = function(sid){
-	return this.clientsIndex[sid];
-};
-
 Listener.prototype._onClientConnect = function(client){
 	if (!(client instanceof Client) || !client.sessionId){
 		return this.options.log('Invalid client');
 	}
-	client.i = this.clients.length;
-	this.clients.push(client);
-	this.clientsIndex[client.sessionId] = client;
+	this.clients[client.sessionId] = client;
 	this.options.log('Client '+ client.sessionId +' connected');
 	this.emit('clientConnect', client);
 	this.emit('connection', client);
@@ -137,8 +153,7 @@ Listener.prototype._onClientMessage = function(data, client){
 };
 
 Listener.prototype._onClientDisconnect = function(client){
-	this.clientsIndex[client.sessionId] = null;
-	this.clients[client.i] = null;
+	delete this.clients[client.sessionId];
 	this.options.log('Client '+ client.sessionId +' disconnected');
 	this.emit('clientDisconnect', client);
 };
