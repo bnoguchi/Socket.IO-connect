@@ -21,6 +21,7 @@ Method 1:
 
     var socket = io.listen(server); // Wrap your connect server with Socket.IO
 
+    require('socket.io-connect');
     // socket.prefixWithMiddleware punts the client's request down
     // the Connect middleware if there is a Socket.IO 'connection' event
     socket.on('connection', socket.prefixWithMiddleware( function (client, req, res) {
@@ -33,10 +34,10 @@ Method 1:
 Method 2:
     var connect = require('connect')
       , MemoryStore = require('connect/middleware/session/memory')
-      , socketIO = require("socket.io-connect").socketIO,
+      , socketIO = require("socket.io-connect").socketIO;
 
-      // Setup your server with middleware
-      , server = connect.createServer(
+    // Setup your server with middleware
+    var server = connect.createServer(
           // socketIO "middleware" does the same as Method 1 but more idiomatically
           // Always have socketIO middleware come first, so it can setup the socket.IO endpoint
           socketIO( function () { return server; }, function (client, req, res) {
@@ -45,8 +46,7 @@ Method 2:
           connect.cookieDecoder(),
           connect.session({ store: new MemoryStore({ reapInterval: 60000 * 10}) })
 
-        )
-      , io = require('./path/to/socket.io');
+        );
 
     server.listen(8000); // Listen for requests
 
