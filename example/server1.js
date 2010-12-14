@@ -1,13 +1,10 @@
 var connect = require('connect'), 
-		sys = require('sys'),
     url = require('url'),
     socketIO = require("../socketIO").socketIO,
-    
     buffer = [];
 	
 var server = connect.createServer(
-  connect.staticProvider(__dirname),
-  socketIO( function (client) {
+  socketIO( function () { return server; }, function (client, req, res) {
     client.send(JSON.stringify({ buffer: buffer }));
     client.broadcast(JSON.stringify({ announcement: client.sessionId + ' connected' }));
 
@@ -22,7 +19,8 @@ var server = connect.createServer(
       client.broadcast(JSON.stringify({ announcement: client.sessionId + ' disconnected' }));
     });
   }),
-  function (req, res) {
+  connect.staticProvider(__dirname),
+  function (req, res, next) {
     // your normal server code
     var path = url.parse(req.url).pathname;
     switch (path){
@@ -32,6 +30,7 @@ var server = connect.createServer(
         res.end();
         break;
     }
+    next();
   }
 );
 server.listen(8080);
