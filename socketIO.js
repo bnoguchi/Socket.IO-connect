@@ -1,4 +1,4 @@
-var io = require('./vendor/socket.io-node');
+var io = require('socket.io');
 
 io.Listener.prototype.prefixWithMiddleware = function (fn) {
   var self = this;

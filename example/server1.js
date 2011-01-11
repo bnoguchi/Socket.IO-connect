@@ -1,7 +1,7 @@
 var connect = require('connect'), 
     url = require('url'),
     buffer = [],
-    io = require('../vendor/socket.io-node');
+    io = require('socket.io');
 require("../socketIO");
 	
 var server = connect.createServer(

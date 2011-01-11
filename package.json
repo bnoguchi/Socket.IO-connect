@@ -1,6 +1,6 @@
 {
   "name" : "socket.io-connect"
-, "version" : "0.1.0"
+, "version" : "0.2.0"
 , "description" : "Socket.IO middleware for Connect. (Or use Connect middleware from Socket.IO)"
 , "keywords": [ "node", "connect", "socket.io", "middleware" ]
 , "author": "Brian Noguchi <brian.noguchi@gmail.com>"
@@ -13,6 +13,9 @@
     "type": "git"
   , "url": "https://github.com/bnoguchi/Socket.IO-connect"
   }
-, "bugs": { "web": "http://github.com/bnoguchi/Socket.IO-connect/issues" }
+, "dependencies": {
+    "socket.io":"0.6.8",
+  }
+, "bugs": { "web": "https://github.com/bnoguchi/Socket.IO-connect/issues" }
 , "engines": { "node":  ">=0.2.0" }
 }
