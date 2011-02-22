@@ -1,21 +1,23 @@
 {
-  "name" : "socket.io-connect"
-, "version" : "0.2.0"
-, "description" : "Socket.IO middleware for Connect. (Or use Connect middleware from Socket.IO)"
-, "keywords": [ "node", "connect", "socket.io", "middleware" ]
-, "author": "Brian Noguchi <brian.noguchi@gmail.com>"
-, "contributors": [
-    { "name": "Brian Noguchi", "web": "http://ngchi.wordpress.com" }
-  ]
-, "licenses": [ "MIT" ]
-, "main": "./socketIO.js"
-, "repository": {
-    "type": "git"
-  , "url": "https://github.com/bnoguchi/Socket.IO-connect"
-  }
-, "dependencies": {
-    "socket.io":"0.6.8",
-  }
-, "bugs": { "web": "https://github.com/bnoguchi/Socket.IO-connect/issues" }
-, "engines": { "node":  ">=0.2.0" }
+  "name" : "socket.io-connect",
+  "description" : "Socket.IO middleware for Connect. (Or use Connect middleware from Socket.IO)",
+  "version" : "0.2.0",
+  "keywords": [ "node", "connect", "socket.io", "middleware" ],
+  "homepage": "https://github.com/bnoguchi/hooks-js/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bnoguchi/Socket.IO-connect.git"
+  },
+  "author": "Brian Noguchi <brian.noguchi@gmail.com> (https://github.com/bnoguchi/)",
+  "main": "./socketIO.js",
+  "directories": {
+    "lib": "."
+  },
+  "dependencies": {
+    "socket.io":"0.6.12"
+  },
+  "engines": {
+    "node":  ">=0.4.0"
+  },
+  "licenses": [ "MIT" ]
 }
