@@ -3,7 +3,7 @@ var io = require('socket.io');
 io.Listener.prototype.prefixWithMiddleware = function (fn) {
   var self = this;
   return function (client) {
-    var dummyRes = {writeHead: null};
+    var dummyRes = {writeHead: null,setHeader:function(){}};
     // Throw the request down the Connect middleware stack
     // so we can use Connect middleware for free.
     self.server.handle(client.request, dummyRes, function () {
