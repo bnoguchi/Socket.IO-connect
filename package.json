@@ -9,12 +9,14 @@
     "url": "https://github.com/bnoguchi/Socket.IO-connect.git"
   },
   "author": "Brian Noguchi <brian.noguchi@gmail.com> (https://github.com/bnoguchi/)",
+  "contributors": ["kazuyukitanimura"],
   "main": "./socketIO.js",
   "directories": {
     "lib": "."
   },
   "dependencies": {
-    "socket.io":">=0.6.12"
+    "socket.io":">=0.6.12",
+    "connect":">=1.0.3"
   },
   "engines": {
     "node":  ">=0.4.0"
