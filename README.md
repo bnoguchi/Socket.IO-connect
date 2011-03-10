@@ -8,12 +8,11 @@ Leverage the power of [Connect](http://github.com/senchalabs/Connect) middleware
 ## How To Use
 Method 1:
     var connect = require('connect')
-      , MemoryStore = require('connect/middleware/session/memory')
 
       // Setup your server with middleware
       , server = connect.createServer(
           connect.cookieDecoder(),
-          connect.session({ store: new MemoryStore({ reapInterval: 60000 * 10}) })
+          connect.session({ secret: "random text", fingerprint: "") })//This is for connect@1.0.3
         )
       , io = require('./path/to/socket.io');
 
@@ -33,7 +32,6 @@ Method 1:
 
 Method 2:
     var connect = require('connect')
-      , MemoryStore = require('connect/middleware/session/memory')
       , socketIO = require("socket.io-connect").socketIO;
 
     // Setup your server with middleware
@@ -44,8 +42,7 @@ Method 2:
             client.send(req.session.toString()); // Send the client their session
           }),
           connect.cookieDecoder(),
-          connect.session({ store: new MemoryStore({ reapInterval: 60000 * 10}) })
-
+          connect.session({ secret: "random text", fingerprint: "") })//This is for connect@1.0.3
         );
 
     server.listen(8000); // Listen for requests
