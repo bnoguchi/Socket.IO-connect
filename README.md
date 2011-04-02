@@ -11,16 +11,15 @@ Method 1:
 
       // Setup your server with middleware
       , server = connect.createServer(
-          connect.cookieDecoder(),
-          connect.session({ secret: "random text", fingerprint: "") })//This is for connect@1.0.3
+          connect.cookieParser(),//This is for connect@>1.0.3
+          connect.session({ secret: "random text", fingerprint: "" })//This is for connect@>1.0.3
         )
-      , io = require('./path/to/socket.io');
+      , io = require('socket.io-connect');//This part is modified for this fork
 
     server.listen(8000); // Listen for requests
 
     var socket = io.listen(server); // Wrap your connect server with Socket.IO
 
-    require('socket.io-connect');
     // socket.prefixWithMiddleware punts the client's request down
     // the Connect middleware if there is a Socket.IO 'connection' event
     socket.on('connection', socket.prefixWithMiddleware( function (client, req, res) {
@@ -41,8 +40,8 @@ Method 2:
           socketIO( function () { return server; }, function (client, req, res) {
             client.send(req.session.toString()); // Send the client their session
           }),
-          connect.cookieDecoder(),
-          connect.session({ secret: "random text", fingerprint: "") })//This is for connect@1.0.3
+          connect.cookieParser(),//This is for connect@>1.0.3
+          connect.session({ secret: "random text", fingerprint: "" })//This is for connect@>1.0.3
         );
 
     server.listen(8000); // Listen for requests
@@ -50,12 +49,12 @@ Method 2:
 ## Example
 I have re-implemented the example chat application from the Socket.IO-node github repo, using Connect and Socket.IO-connect.
 
-To run this example using method 1:
+To run this example using method 1: //Note This example is for the original fork
 	git clone http://github.com/bnoguchi/Socket.IO-connect.git --recursive
 	cd Socket.IO-connect/example/
 	node server1.js
 
-To run this example using method 2:
+To run this example using method 2: //Note This example is for the original fork
 	git clone http://github.com/bnoguchi/Socket.IO-connect.git --recursive
 	cd Socket.IO-connect/example/
 	node server2.js

@@ -1,4 +1,4 @@
-var io = require('socket.io');
+var io = module.exports = require('socket.io');
 
 io.Listener.prototype.prefixWithMiddleware = function (fn) {
   var self = this;
@@ -7,12 +7,13 @@ io.Listener.prototype.prefixWithMiddleware = function (fn) {
     // Throw the request down the Connect middleware stack
     // so we can use Connect middleware for free.
     self.server.handle(client.request, dummyRes, function () {
-      fn(client, client.request, dummyRes);
+      //fn(client, client.request, dummyRes);
+      fn(client, client.request, client.request.res);
     });
   };
 };
 
-exports.socketIO = function (serverLambda, options, connectionCallback) {
+module.exports.socketIO = function (serverLambda, options, connectionCallback) {
   var options, connectionCallback;
   if (arguments.length === 2) {
     if (typeof arguments[1] === "function") {
