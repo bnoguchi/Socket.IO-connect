@@ -6,7 +6,7 @@
   "homepage": "https://github.com/bnoguchi/hooks-js/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bnoguchi/Socket.IO-connect.git"
+    "url": "https://github.com/kazuyukitanimura/Socket.IO-connect.git"
   },
   "author": "Brian Noguchi <brian.noguchi@gmail.com> (https://github.com/bnoguchi/)",
   "contributors": ["kazuyukitanimura"],
