@@ -75,7 +75,7 @@ Brian Noguchi
 
 ### With fixes from
 
-- @kazuyukitanimura
+- [kazuyukitanimura](https://github.com/kazuyukitanimura)
 
 ### MIT License
 Copyright (c) 2011 by Brian Noguchi
