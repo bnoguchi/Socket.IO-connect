@@ -5,7 +5,7 @@ var connect = require('connect'),
 require("../socketIO");
 	
 var server = connect.createServer(
-  connect.staticProvider(__dirname),
+  connect.static(__dirname),
   function (req, res, next) {
     // your normal server code
     var path = url.parse(req.url).pathname;
@@ -14,7 +14,7 @@ var server = connect.createServer(
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.write('<h1>Welcome. Try the <a href="/chat.html">chat</a> example.</h1>');
         res.end();
-        break;
+        return;
     }
     next();
   }
