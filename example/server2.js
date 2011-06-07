@@ -1,10 +1,10 @@
 var connect = require('connect'), 
     url = require('url'),
-    socketIO = require("../socketIO").socketIO,
+    socketIOconnect = require("../socketIOconnect").socketIOconnect,
     buffer = [];
 	
 var server = connect.createServer(
-  socketIO( function () { return server; }, function (client, req, res) {
+  socketIOconnect( function () { return server; }, function (client, req, res) {
     client.send(JSON.stringify({ buffer: buffer }));
     client.broadcast(JSON.stringify({ announcement: client.sessionId + ' connected' }));
 

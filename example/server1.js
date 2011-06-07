@@ -1,8 +1,7 @@
 var connect = require('connect'), 
     url = require('url'),
     buffer = [],
-    io = require('socket.io');
-require("../socketIO");
+    io = require('../socketIOconnect');
 	
 var server = connect.createServer(
   connect.static(__dirname),
