@@ -14,13 +14,13 @@
     "lib": "."
   },
   "dependencies": {
-    "socket.io":">=0.6.17"
+    "socket.io":"=0.6.x"
   },
   "devDependencies": {
     "connect": ">=1.4.3"
   },
   "engines": {
-    "node":  ">=0.4.0"
+    "node":  ">=0.4.x"
   },
   "licenses": [ "MIT" ]
 }
