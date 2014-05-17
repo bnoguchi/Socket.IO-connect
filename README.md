@@ -55,16 +55,21 @@ server.listen(8000); // Listen for requests
 ## Example
 I have re-implemented the example chat application from the Socket.IO-node github repo, using Connect and Socket.IO-connect.
 
+Before running the examples you will need to install connect and socket.io:
+
+    git clone http://github.com/bnoguchi/Socket.IO-connect.git --recursive
+    cd Socket.IO-connect
+    npm install connect
+    npm install socket.io
+
 To run this example using method 1:
 
-	git clone http://github.com/bnoguchi/Socket.IO-connect.git --recursive
-	cd Socket.IO-connect/example/
+	cd example/
 	node server1.js
 
 To run this example using method 2:
 
-	git clone http://github.com/bnoguchi/Socket.IO-connect.git --recursive
-	cd Socket.IO-connect/example/
+	cd example/
 	node server2.js
 
 and then point your browser to http://127.0.0.1:8080.
